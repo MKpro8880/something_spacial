@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1f6"><title>Private Valentine Dashboard 💗</title>
+<style>
+:root{--deep:#a74772;--ink:#563b4a;--pink:#ef8eb5}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#fff8fb,#f5efff);font-family:system-ui,-apple-system,sans-serif;color:var(--ink)}
+main{max-width:900px;margin:auto;padding:22px 14px 50px}.card{background:#ffffffeb;border:1px solid #fff;border-radius:22px;padding:22px;margin:14px 0;box-shadow:0 14px 40px #b95d8418}
+h1,h2{color:var(--deep)}h1{font-size:clamp(1.7rem,6vw,2.5rem)}p{line-height:1.6}.field{width:100%;padding:13px;border:1px solid #e8cbd8;border-radius:12px;font:inherit;margin:6px 0 14px}
+button{border:0;border-radius:999px;padding:12px 18px;background:var(--pink);color:white;font-weight:800;font:inherit;cursor:pointer}button.secondary{background:#fff1f6;color:var(--deep);border:1px solid #f0c7d9}
+.status{font-size:.92rem;color:#8e536f}.hidden{display:none!important}.entry{border:1px solid #f1d9e4;border-radius:16px;padding:16px;margin:12px 0;background:#fffafd}.meta{font-size:.85rem;color:#8d7280}.answer{margin:8px 0;line-height:1.55;overflow-wrap:anywhere}.pill{display:inline-block;padding:5px 10px;background:#fbe3ee;border-radius:999px;color:#9c426c;font-size:.84rem}
+</style>
+</head>
+<body><main>
+<h1>💗 Swara Valentine — Private Dashboard</h1>
+<p>Sign in with the owner account you created in Supabase. Only that authenticated account can read saved responses.</p>
+<section class="card" id="loginCard">
+<h2>Owner sign-in 🔐</h2>
+<label for="email">Owner email</label><input class="field" id="email" type="email" autocomplete="username" placeholder="you@example.com">
+<label for="password">Password</label><input class="field" id="password" type="password" autocomplete="current-password" placeholder="Your Supabase account password">
+<button id="loginBtn">Sign in</button><p class="status" id="loginStatus" role="status"></p>
+</section>
+<section class="card hidden" id="dashboardCard">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap"><h2>Responses 💌</h2><div><button class="secondary" id="refreshBtn">Refresh</button> <button id="logoutBtn">Sign out</button></div></div>
+<p class="status" id="dashStatus" role="status"></p><div id="responses"></div>
+</section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Paste the same project URL and publishable/anon key used in index.html.
+const SUPABASE_URL = "https://xrbmttubrmmwqpvcjpyo.supabase.co";
+const SUPABASE_ANON_KEY = "sb_publishable_37gOwCMrxkgPAVannTygDg_mjiQaBUG";
+const client = (window.supabase && !SUPABASE_URL.includes("YOUR-PROJECT") && !SUPABASE_ANON_KEY.includes("YOUR_"))
+  ? window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY) : null;
+const loginCard=document.getElementById("loginCard"), dashboardCard=document.getElementById("dashboardCard");
+const loginStatus=document.getElementById("loginStatus"), dashStatus=document.getElementById("dashStatus");
+document.getElementById("loginBtn").addEventListener("click",login);
+document.getElementById("refreshBtn").addEventListener("click",loadResponses);
+document.getElementById("logoutBtn").addEventListener("click",async()=>{if(client)await client.auth.signOut();dashboardCard.classList.add("hidden");loginCard.classList.remove("hidden");loginStatus.textContent="Signed out.";});
+function safe(v){const d=document.createElement("div");d.textContent=String(v??"");return d.innerHTML;}
+async function login(){
+ if(!client){loginStatus.textContent="Setup incomplete: configure the Supabase URL and publishable/anon key in dashboard.html.";return;}
+ const email=document.getElementById("email").value.trim(),password=document.getElementById("password").value;
+ if(!email||!password){loginStatus.textContent="Enter your email and password.";return;}
+ document.getElementById("loginBtn").disabled=true;loginStatus.textContent="Signing in…";
+ const {error}=await client.auth.signInWithPassword({email,password});
+ document.getElementById("loginBtn").disabled=false;
+ if(error){loginStatus.textContent="Sign-in failed. Check your email and password.";return;}
+ loginCard.classList.add("hidden");dashboardCard.classList.remove("hidden");await loadResponses();
+}
+async function loadResponses(){
+ if(!client)return;
+ dashStatus.textContent="Loading responses…";
+ const {data:{user}}=await client.auth.getUser();
+ if(!user){dashboardCard.classList.add("hidden");loginCard.classList.remove("hidden");dashStatus.textContent="Please sign in again.";return;}
+ // RLS also checks auth.uid() = owner_id; this filter is an extra query restriction.
+ const {data,error}=await client.from("valentine_responses").select("id,created_at,answers,final_answer,final_answer_label").eq("owner_id",user.id).order("created_at",{ascending:false});
+ if(error){dashStatus.textContent="Couldn't load responses. Check the SQL setup and RLS policies.";return;}
+ const root=document.getElementById("responses");root.innerHTML="";
+ if(!data.length){dashStatus.textContent="No submitted answers yet. When she consents and taps Submit, they will appear here.";return;}
+ dashStatus.textContent=`${data.length} submission${data.length===1?"":"s"} saved.`;
+ for(const row of data){
+  const entry=document.createElement("article");entry.className="entry";
+  const date=new Date(row.created_at).toLocaleString();
+  let content=`<div class="meta">Submitted ${safe(date)}</div><p><span class="pill">Valentine answer: ${safe(row.final_answer_label||row.final_answer)}</span></p>`;
+  const arr=Array.isArray(row.answers)?row.answers:[];
+  for(const a of arr){content+=`<div class="answer"><strong>${safe(a.question)}</strong><br>${safe(a.answer||"No answer selected")}</div>`;}
+  entry.innerHTML=content;root.appendChild(entry);
+ }
+}
+if(!client){loginStatus.textContent="First configure Supabase URL and publishable/anon key in this file.";}
+</script></body></html>
