@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#fff1f6">
+<title>A Little Something for Swara 💗</title>
+<style>
+  :root{--pink:#ef8eb5;--deep:#a74772;--ink:#563b4a;--cream:#fff9fb;--lav:#f1eaff}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;font-family:ui-rounded,"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:radial-gradient(circle at 15% 10%,#ffe1ed 0,transparent 32%),radial-gradient(circle at 90% 75%,#e9e1ff 0,transparent 34%),linear-gradient(135deg,#fff9fb,#fff0f6);overflow-x:hidden}
+  .floaties{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+  .floaty{position:absolute;bottom:-50px;opacity:.55;animation:rise linear infinite;font-size:20px}
+  @keyframes rise{to{transform:translateY(-115vh) rotate(25deg);opacity:0}}
+  .wrap{position:relative;z-index:1;width:min(720px,100%);margin:auto;padding:22px 16px 44px}
+  header{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:18px}
+  .brand{font-size:.9rem;font-weight:800;letter-spacing:.04em;color:var(--deep)}
+  button{font:inherit;cursor:pointer;border:0}
+  .music{border:1px solid #f4c8da;background:#ffffffb8;color:var(--deep);border-radius:999px;padding:10px 13px;font-size:.86rem;font-weight:700}
+  .card{background:#ffffffd9;border:1px solid #fff;box-shadow:0 18px 60px #b95d8420;border-radius:28px;padding:clamp(23px,6vw,44px);text-align:center;backdrop-filter:blur(10px);animation:appear .6s ease both}
+  @keyframes appear{from{opacity:0;transform:translateY(12px) scale(.99)}to{opacity:1;transform:translateY(0) scale(1)}}
+  .eyebrow{color:var(--deep);font-size:.76rem;letter-spacing:.15em;font-weight:900;text-transform:uppercase}
+  .art{font-size:clamp(3.4rem,12vw,5.2rem);line-height:1.2;margin:18px 0 12px;filter:drop-shadow(0 6px 9px #d66b9b22)}
+  h1{font-size:clamp(2rem,8vw,3.4rem);line-height:1.08;margin:8px 0 15px;color:#9c426c;letter-spacing:-.04em}
+  h2{font-size:clamp(1.55rem,6vw,2.2rem);line-height:1.15;color:#9c426c;margin:10px 0 14px;letter-spacing:-.03em}
+  p{font-size:1.04rem;line-height:1.75;margin:12px auto;max-width:520px}
+  .small{font-size:.88rem;color:#8e6a7b}
+  .buttons{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-top:25px}
+  .primary,.secondary,.choice{border-radius:999px;padding:13px 19px;font-weight:800;transition:transform .18s,box-shadow .18s}
+  .primary{background:linear-gradient(135deg,#f3a4c4,#e97ba9);color:#fff;box-shadow:0 8px 20px #df78a43b}
+  .secondary,.choice{background:#fff4f8;color:#a74772;border:1px solid #f6cfe0}
+  .primary:hover,.secondary:hover,.choice:hover{transform:translateY(-2px)}
+  .progress{height:5px;background:#f9e0eb;border-radius:99px;overflow:hidden;margin:0 0 18px}
+  .bar{height:100%;width:0;background:linear-gradient(90deg,#ed9dbd,#bda8ed);transition:width .35s}
+  .dots{display:flex;justify-content:center;gap:6px;margin:20px 0 0}
+  .dot{width:7px;height:7px;border-radius:50%;background:#f2cada}
+  .dot.on{background:#d86e9e;width:19px;border-radius:9px}
+  .answers{display:grid;gap:10px;margin:22px auto 0;max-width:460px}
+  .choice{width:100%;border-radius:17px;padding:14px;text-align:left}
+  .choice.selected{background:#fbe1ed;border-color:#e78bb2;box-shadow:0 0 0 2px #f8d0e1 inset}
+  .note{font-size:.88rem;background:#fff4f8;border-radius:17px;padding:14px;margin-top:22px;color:#8c5d73}
+  .hidden{display:none!important}
+  footer{text-align:center;color:#a87990;font-size:.8rem;margin-top:18px}
+  .sparkle{display:inline-block;animation:twinkle 1.7s ease-in-out infinite alternate}
+  @keyframes twinkle{to{transform:rotate(12deg) scale(1.13);opacity:.65}}
+  .letter{text-align:left;background:#fff7fa;border:1px dashed #edb2cb;border-radius:20px;padding:20px;margin-top:20px;line-height:1.8}
+  .letter p{font-size:1rem}
+  @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="floaties" id="floaties" aria-hidden="true"></div>
+<div class="wrap">
+  <header>
+    <div class="brand">♡ A LITTLE NOTE FOR YOU</div>
+    <button class="music" id="musicBtn" aria-label="Toggle gentle background music">♫ Music: off</button>
+  </header>
+  <div class="progress"><div class="bar" id="bar"></div></div>
+  <main class="card" id="app" aria-live="polite">
+    <div class="eyebrow">made with a little extra care</div>
+    <div class="art">💌</div>
+    <h1>Hey, Swara!</h1>
+    <p>I made a tiny corner of the internet just for you. No big reason… just thought someone as lovely as you deserved a little reminder. 🌷</p>
+    <p>Ready for a few tiny questions?</p>
+    <div class="buttons"><button class="primary" id="startBtn">Okay, let's go ✨</button></div>
+    <p class="small">P.S. Turn on the music if you want a little soundtrack. 🎶</p><p class="small">At the end, you can choose whether to submit your answers privately. 💗</p><p class="small">At the end, you can choose to send your answers to me on WhatsApp. Nothing is shared unless you tap the button and press Send. 💗</p>
+  </main>
+  <footer>made of friendship, tiny memories & a few butterflies 💗</footer>
+</div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// Paste these values from your Supabase project after following README-SETUP.txt.
+const SUPABASE_URL = "https://YOUR-PROJECT.supabase.co";
+const SUPABASE_ANON_KEY = "YOUR_SUPABASE_PUBLISHABLE_OR_ANON_KEY";
+const SUPABASE_OWNER_ID = "YOUR_AUTH_USER_UUID";
+
+const steps = [
+ {eyebrow:"01 · a tiny warm-up", art:"🌸", title:"First things first…", text:"Can you promise to smile at least once while going through this little page?", answers:["Okay, I’m smiling already 😊","I’ll try, no promises 😌"], after:"Either answer counts. Your smile is a pretty good place to start."},
+ {eyebrow:"02 · bestie things", art:"🫶", title:"A very important question", text:"What makes a friendship feel special to you?", answers:["Being able to be my silly self 😂","Someone who listens and shows up 💗","The little everyday conversations 🌷"], after:"The little things are often the big things in disguise."},
+ {eyebrow:"03 · just so you know", art:"✨", title:"Here’s a small reminder", text:"Do you know that you can make an ordinary day feel a little brighter just by being yourself?", answers:["That’s actually so sweet 🥹","You’re being cheesy now 😂"], after:"Maybe a little cheesy. But still completely true."},
+ {eyebrow:"04 · from my heart", art:"☁️", title:"Can I tell you something?", text:"Some people make life feel lighter without even trying. The chats, the laughs, the random little moments… they can mean more than they realise.", answers:["Tell me more 💌","I’m listening 🥹"], after:"You’re one of those people for me, Swara. I hope you never forget that."}
+];
+let index=0, answers=[], audioCtx=null, musicOn=false, musicTimer=null, noteIndex=0;
+const app=document.getElementById("app"), bar=document.getElementById("bar"), musicBtn=document.getElementById("musicBtn");
+function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderStep(){
+ const s=steps[index]; bar.style.width=((index+1)/(steps.length+1)*100)+"%";
+ app.innerHTML=`<div class="eyebrow">${s.eyebrow}</div><div class="art">${s.art}</div><h2>${s.title}</h2><p>${s.text}</p><div class="answers">${s.answers.map((a,i)=>`<button class="choice" data-answer="${i}">${a}</button>`).join("")}</div><div class="dots">${steps.map((_,i)=>`<span class="dot ${i<=index?'on':''}"></span>`).join("")}</div><p class="small">No wrong answers here. Just a little moment for you. 💗</p>`;
+ app.querySelectorAll("[data-answer]").forEach(btn=>btn.addEventListener("click",()=>{answers[index]=s.answers[+btn.dataset.answer];showAfter();}));
+}
+function showAfter(){
+ const s=steps[index]; bar.style.width=((index+1)/(steps.length+1)*100)+"%";
+ app.innerHTML=`<div class="eyebrow">a little note for you</div><div class="art">💗</div><h2>${s.after}</h2><p>Ready for the next little thing?</p><div class="buttons"><button class="primary" id="nextBtn">${index===steps.length-1?"One last thing…":"Next ✨"}</button></div>`;
+ document.getElementById("nextBtn").addEventListener("click",()=>{index++; if(index<steps.length)renderStep();else renderFinal();});
+}
+function renderFinal(){
+ bar.style.width="100%";
+ app.innerHTML=`<div class="eyebrow">one honest little note</div><div class="art"><span class="sparkle">💌</span></div><h2>Something I wanted you to know</h2><div class="letter"><p>Swara,</p><p>I’m really glad you’re in my life. You make ordinary conversations memorable, random moments funny, and some days a whole lot brighter.</p><p>I don’t want this little website to put pressure on you or make things awkward. Our friendship matters to me, and your comfort matters too.</p><p>But I’d be lying if I said I’d never wondered whether there could be something a little more between us someday. So, only if it feels right to you… 💗</p></div><h2 style="margin-top:25px">So, Swara… will you be my Valentine? 🌹💗</h2><p class="small">Your answer matters, but so does your comfort. No pressure — just a little question from someone who cares about you.</p><div class="answers"><button class="choice" data-final="yes">Yes… I'd love to! 💗</button><button class="choice" data-final="maybe">Maybe… tell me more 👀</button><button class="choice" data-final="time">I need some time to think 🌷</button><button class="choice" data-final="friends">Besties, always 🫶</button></div>`;
+ app.querySelectorAll("[data-final]").forEach(btn=>btn.addEventListener("click",()=>finalResponse(btn.dataset.final)));
+}
+function finalResponse(choice){
+ const messages={
+  yes:["YOU JUST MADE ME THE HAPPIEST PERSON 🥹💗","Thank you for being honest. We can take things slowly and talk whenever you feel comfortable."],
+  maybe:["A maybe? 👀💗","That's fair! I'd love to tell you more, whenever you're comfortable. No rush at all."],
+  time:["Take all the time you need 🌷","There’s no rush and no pressure. You don’t have to give me an answer today."],
+  friends:["Our friendship matters to me, always 🫶","Thank you for telling me honestly. I respect how you feel, and I’m grateful to have you in my life."]
+ };
+ const [title,text]=messages[choice];
+ const finalLabels = {yes:"Yes… I'd love to! 💗", maybe:"Maybe… tell me more 👀", time:"I need some time to think 🌷", friends:"Besties, always 🫶"};
+ const allAnswers = steps.map((s,i)=>({question:s.title, answer:answers[i] || null}));
+ app.innerHTML=`<div class="art">${choice==="yes"?"💗":choice==="time"?"🌷":"🫶"}</div><h2>${title}</h2><p>${text}</p><p>Thank you for being you, Swara. That’s the whole little surprise. ✨</p>
+ <div class="letter" style="text-align:center">
+   <h2 style="font-size:1.25rem">Would you like to share your answers with me? 💌</h2>
+   <p class="small">If you submit, your choices on this page will be saved privately so Malay can see them on his password-protected dashboard. Nothing is saved unless you agree and tap Submit.</p>
+   <label style="display:flex;gap:10px;align-items:flex-start;text-align:left;line-height:1.5;margin:18px 0"><input id="consentBox" type="checkbox" style="margin-top:5px;transform:scale(1.2)"> <span>I understand that my answers and Valentine choice will be saved for Malay to view privately.</span></label>
+   <button class="primary" id="submitAnswersBtn" style="width:100%">Submit my answers privately 💗</button>
+   <p id="submitStatus" class="small" role="status"></p>
+ </div>
+ <div class="buttons"><button class="secondary" id="replayBtn">Read it again ↺</button></div>`;
+ document.getElementById("submitAnswersBtn").addEventListener("click", submitAnswers);
+ document.getElementById("replayBtn").addEventListener("click",()=>{index=0;answers=[];renderStep();});
+ bar.style.width="100%"; confetti();
+
+ async function submitAnswers(){
+   const status = document.getElementById("submitStatus");
+   const btn = document.getElementById("submitAnswersBtn");
+   if(!document.getElementById("consentBox").checked){
+     status.textContent = "Please tick the consent box first. 💗";
+     return;
+   }
+   if(SUPABASE_URL.includes("YOUR-PROJECT") || SUPABASE_ANON_KEY.includes("YOUR_") || SUPABASE_OWNER_ID.includes("YOUR_")){
+     status.textContent = "This website hasn't been connected to Supabase yet. Malay needs to finish the setup first.";
+     return;
+   }
+   if(!window.supabase || !window.supabase.createClient){
+     status.textContent = "Couldn't load the secure response service. Please check your internet and try again.";
+     return;
+   }
+   btn.disabled = true;
+   btn.textContent = "Saving your answers…";
+   status.textContent = "";
+   try{
+     const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+     const payload = {
+       owner_id: SUPABASE_OWNER_ID,
+       answers: allAnswers,
+       final_answer: choice,
+       final_answer_label: finalLabels[choice]
+     };
+     const {error} = await client.from("valentine_responses").insert(payload);
+     if(error) throw error;
+     status.textContent = "Your answers have been submitted privately. Thank you 💗";
+     btn.textContent = "Answers submitted ✓";
+     btn.disabled = true;
+   }catch(err){
+     console.error("Supabase submission error:", err);
+     const detail = (err && err.message) ? err.message : "Unknown error";
+     status.textContent = "Couldn't save: " + detail + " — check the Supabase setup and try again.";
+     btn.disabled = false;
+     btn.textContent = "Try submitting again 💗";
+   }
+ }
+}
+function confetti(){
+ const symbols=["💗","✨","🌸","♡","💕"];
+ for(let i=0;i<18;i++){const e=document.createElement("span");e.textContent=symbols[i%symbols.length];e.style.cssText=`position:fixed;left:${Math.random()*100}vw;top:-30px;font-size:${16+Math.random()*18}px;z-index:10;pointer-events:none;transition:transform ${2+Math.random()*2}s linear,opacity 3s;`;document.body.appendChild(e);requestAnimationFrame(()=>{e.style.transform=`translateY(${window.innerHeight+80}px) rotate(${Math.random()*360}deg)`;e.style.opacity="0"});setTimeout(()=>e.remove(),4200)}
+}
+document.getElementById("startBtn").addEventListener("click",()=>{index=0;renderStep();});
+const floater=document.getElementById("floaties");
+for(let i=0;i<20;i++){const e=document.createElement("span");e.className="floaty";e.textContent=["♡","✦","♥","✿"][i%4];e.style.left=Math.random()*100+"%";e.style.animationDuration=(10+Math.random()*15)+"s";e.style.animationDelay=(-Math.random()*20)+"s";e.style.fontSize=(12+Math.random()*17)+"px";floater.appendChild(e);}
+// Gentle synthesized notes: no external audio file or copyrighted track needed.
+function playNote(){
+ if(!musicOn||!audioCtx)return;
+ const melody=[523.25,659.25,783.99,659.25,587.33,698.46,659.25,523.25,440,523.25,659.25,587.33];
+ const now=audioCtx.currentTime, freq=melody[noteIndex%melody.length];noteIndex++;
+ const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
+ osc.type="sine";osc.frequency.setValueAtTime(freq,now);
+ gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.045,now+.06);gain.gain.exponentialRampToValueAtTime(.0001,now+.8);
+ osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now);osc.stop(now+.85);
+}
+async function toggleMusic(){
+ try{
+  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  if(audioCtx.state==="suspended")await audioCtx.resume();
+  musicOn=!musicOn;
+  if(musicOn){playNote();musicTimer=setInterval(playNote,650);musicBtn.textContent="♫ Music: on";}
+  else{clearInterval(musicTimer);musicBtn.textContent="♫ Music: off";}
+ }catch(e){musicBtn.textContent="♫ Music unavailable";}
+}
+musicBtn.addEventListener("click",toggleMusic);
+</script>
+</body>
+</html>
