@@ -53,13 +53,7 @@
 <div class="wrap">
   <header>
     <div class="brand">♡ A LITTLE NOTE FOR YOU</div>
-    <a class="music"
-   href="https://www.youtube.com/watch?v=2Vv-BfVoq4g"
-   target="_blank"
-   rel="noopener noreferrer"
-   style="text-decoration:none">
-   ♫ Play Perfect 🎧
-    </a>
+    <button class="music" id="musicBtn" aria-label="Toggle gentle background music">♫ Music: off</button>
   </header>
   <div class="progress"><div class="bar" id="bar"></div></div>
   <main class="card" id="app" aria-live="polite">
@@ -86,7 +80,7 @@ const steps = [
  {eyebrow:"03 · just so you know", art:"✨", title:"Here’s a small reminder", text:"Do you know that you can make an ordinary day feel a little brighter just by being yourself?", answers:["That’s actually so sweet 🥹","You’re being cheesy now 😂"], after:"Maybe a little cheesy. But still completely true."},
  {eyebrow:"04 · from my heart", art:"☁️", title:"Can I tell you something?", text:"Some people make life feel lighter without even trying. The chats, the laughs, the random little moments… they can mean more than they realise.", answers:["Tell me more 💌","I’m listening 🥹"], after:"You’re one of those people for me, Swara. I hope you never forget that."}
 ];
-let index=0, answers=[], audioCtx=null, musicOn=false, musicTimer=null, noteIndex=0;
+let index=0, answers=[], song.play=true,;
 const app=document.getElementById("app"), bar=document.getElementById("bar"), musicBtn=document.getElementById("musicBtn");
 function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function renderStep(){
@@ -176,22 +170,24 @@ const floater=document.getElementById("floaties");
 for(let i=0;i<20;i++){const e=document.createElement("span");e.className="floaty";e.textContent=["♡","✦","♥","✿"][i%4];e.style.left=Math.random()*100+"%";e.style.animationDuration=(10+Math.random()*15)+"s";e.style.animationDelay=(-Math.random()*20)+"s";e.style.fontSize=(12+Math.random()*17)+"px";floater.appendChild(e);}
 // Gentle synthesized notes: no external audio file or copyrighted track needed.
 function playNote(){
- if(!musicOn||!audioCtx)return;
- const melody=[523.25,659.25,783.99,659.25,587.33,698.46,659.25,523.25,440,523.25,659.25,587.33];
- const now=audioCtx.currentTime, freq=melody[noteIndex%melody.length];noteIndex++;
- const osc=audioCtx.createOscillator(), gain=audioCtx.createGain();
- osc.type="sine";osc.frequency.setValueAtTime(freq,now);
- gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(.045,now+.06);gain.gain.exponentialRampToValueAtTime(.0001,now+.8);
- osc.connect(gain);gain.connect(audioCtx.destination);osc.start(now);osc.stop(now+.85);
+const song = new Audio("./music.mp3");
+song.loop = true;
+song.volume = 0.25;
+
+async function toggleMusic() {
+  try {
+    if (song.paused) {
+      await song.play();
+      musicBtn.textContent = "♫ Music: on";
+    } else {
+      song.pause();
+      musicBtn.textContent = "♫ Music: off";
+    }
+  } catch (error) {
+    musicBtn.textContent = "♫ Tap to retry";
+  }
 }
-async function toggleMusic(){
- try{
-  if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();
-  if(audioCtx.state==="suspended")await audioCtx.resume();
-  musicOn=!musicOn;
-  if(musicOn){playNote();musicTimer=setInterval(playNote,650);musicBtn.textContent="♫ Music: on";}
-  else{clearInterval(musicTimer);musicBtn.textContent="♫ Music: off";}
- }catch(e){musicBtn.textContent="♫ Music unavailable";}
+
 }
 musicBtn.addEventListener("click",toggleMusic);
 </script>
