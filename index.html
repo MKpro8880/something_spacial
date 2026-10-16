@@ -80,7 +80,7 @@ const steps = [
  {eyebrow:"03 · just so you know", art:"✨", title:"Here’s a small reminder", text:"Do you know that you can make an ordinary day feel a little brighter just by being yourself?", answers:["That’s actually so sweet 🥹","You’re being cheesy now 😂"], after:"Maybe a little cheesy. But still completely true."},
  {eyebrow:"04 · from my heart", art:"☁️", title:"Can I tell you something?", text:"Some people make life feel lighter without even trying. The chats, the laughs, the random little moments… they can mean more than they realise.", answers:["Tell me more 💌","I’m listening 🥹"], after:"You’re one of those people for me, Swara. I hope you never forget that."}
 ];
-let index=0, answers=[], song.play=true,;
+let index=0, answers=[];
 const app=document.getElementById("app"), bar=document.getElementById("bar"), musicBtn=document.getElementById("musicBtn");
 function escapeHTML(s){return s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function renderStep(){
