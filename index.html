@@ -169,8 +169,8 @@ document.getElementById("startBtn").addEventListener("click",()=>{index=0;render
 const floater=document.getElementById("floaties");
 for(let i=0;i<20;i++){const e=document.createElement("span");e.className="floaty";e.textContent=["♡","✦","♥","✿"][i%4];e.style.left=Math.random()*100+"%";e.style.animationDuration=(10+Math.random()*15)+"s";e.style.animationDelay=(-Math.random()*20)+"s";e.style.fontSize=(12+Math.random()*17)+"px";floater.appendChild(e);}
 // Gentle synthesized notes: no external audio file or copyrighted track needed.
-function playNote(){
-const song = new Audio("./Ed Sheeran - Perfect.m4a");
+
+const song = new Audio("./Ed%20Sheeran%20-%20Perfect.m4a");
 song.loop = true;
 song.volume = 0.25;
 
@@ -184,12 +184,15 @@ async function toggleMusic() {
       musicBtn.textContent = "♫ Music: off";
     }
   } catch (error) {
+    console.error("Music playback error:", error);
     musicBtn.textContent = "♫ Tap to retry";
   }
 }
 
-}
-musicBtn.addEventListener("click",toggleMusic);
+musicBtn.addEventListener("click", toggleMusic);
+
+
+  
 </script>
 </body>
 </html>
